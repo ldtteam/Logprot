@@ -36,6 +36,6 @@ public class Logprot
     private void setup(final FMLCommonSetupEvent event)
     {
         // some preinit code
-        LOGGER.info("Login protection shields up!");
+        LOGGER.info("Shields up!");
     }
 }

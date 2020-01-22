@@ -1,6 +1,8 @@
 package com.logprot.event;
 
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import com.logprot.players.PlayerManager;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +14,17 @@ public class EventHandler
      * @param event the event.
      */
     @SubscribeEvent
-    public static void onEntityAdded(@NotNull final EntityJoinWorldEvent event)
+    public static void onEntityAdded(@NotNull final PlayerEvent.PlayerLoggedInEvent event)
     {
+        PlayerManager.getInstance().onPlayerLogin(event.getPlayer());
+    }
+
+    @SubscribeEvent
+    public static void onWorldTick(@NotNull final TickEvent.WorldTickEvent event)
+    {
+        if (!event.world.isRemote)
+        {
+            PlayerManager.getInstance().checkPlayerDistances();
+        }
     }
 }
