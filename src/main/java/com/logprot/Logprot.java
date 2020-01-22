@@ -1,7 +1,6 @@
 package com.logprot;
 
 import com.logprot.config.Configuration;
-import com.logprot.entity.ai.CustomGoalTypeData;
 import com.logprot.event.EventHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;

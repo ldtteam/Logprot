@@ -1,2 +1,2 @@
-# Performant
-Vanilla mod with the aim to improve vanilla performance in certain areas.
+# Login Protection
+Simple Mod to protect the player during login from damage
