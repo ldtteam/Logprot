@@ -14,7 +14,7 @@ public class CommonConfiguration
         builder.comment("Time in ticks the logging player is invulnerable, 20 ticks = 1sec. Default is 5secs = 100 ticks");
         invulTime = builder.defineInRange("invulnerabilityTime", 100, 0, 50000);
 
-        builder.comment("Max distance in blocks the invulnerability lasts, default: 4");
+        builder.comment("Max distance in blocks(2d) the invulnerability lasts, default: 4");
         maxDist = builder.defineInRange("maxDistance", 4, 1, 200);
 
         // Escapes the current category level
