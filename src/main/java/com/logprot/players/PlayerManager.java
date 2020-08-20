@@ -53,7 +53,7 @@ public class PlayerManager
         playerDataMap.put(player, new PlayerData(player, player.getPosition(), Logprot.getConfig().getCommon().invulTime.get()));
         if (debug)
         {
-            Logprot.LOGGER.info("Player:" + player.getName().getFormattedText() + " now has login protection for " + Logprot.getConfig().getCommon().invulTime.get() + " ticks");
+            Logprot.LOGGER.info("Player:" + player.getName().getString() + " now has login protection for " + Logprot.getConfig().getCommon().invulTime.get() + " ticks");
         }
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().register(PlayerEventHandler.getInstance());
     }
@@ -81,7 +81,7 @@ public class PlayerManager
             {
                 if (debug)
                 {
-                    Logprot.LOGGER.info("Player:" + entry.getKey().getName().getFormattedText() + " got his login protection removed");
+                    Logprot.LOGGER.info("Player:" + entry.getKey().getName().getString() + " got his login protection removed");
                 }
 
                 entry.getKey().hurtResistantTime = 0;
