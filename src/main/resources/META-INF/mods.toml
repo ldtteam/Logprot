@@ -9,13 +9,13 @@ modLoader="javafml" #mandatory
 loaderVersion="[28,)" #mandatory (28 is current forge version)
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/ldtteam/Performant/issues" #optional
-license="ARR"
+license="GPL"
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 # The modid of the mod
 modId="logprot" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
-version="1.3" #mandatory
+version="1.4" #mandatory
  # A display name for the mod
 displayName="Logprot" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
@@ -48,6 +48,6 @@ Login protection mod which protects the player form damage during login.
 [[dependencies.logprot]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16,1.17]"
+    versionRange="[1.17,1.18)"
     ordering="NONE"
     side="BOTH"

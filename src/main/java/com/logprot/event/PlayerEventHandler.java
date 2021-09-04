@@ -1,11 +1,10 @@
 package com.logprot.event;
 
 import com.logprot.players.PlayerManager;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Eventhandler for the players which are currently invulnerable, removed when no players are invulnverable.
@@ -20,9 +19,9 @@ public class PlayerEventHandler
     }
 
     @SubscribeEvent
-    public void onWorldTick(@NotNull final TickEvent.WorldTickEvent event)
+    public void onWorldTick(final TickEvent.WorldTickEvent event)
     {
-        if (!event.world.isRemote)
+        if (!event.world.isClientSide())
         {
             PlayerManager.getInstance().updatePlayers();
         }
@@ -31,12 +30,12 @@ public class PlayerEventHandler
     @SubscribeEvent
     public void onLivingDamageEvent(LivingDamageEvent event)
     {
-        if (!(event.getEntity() instanceof PlayerEntity))
+        if (!(event.getEntity() instanceof Player))
         {
             return;
         }
 
-        if (PlayerManager.getInstance().isPlayerImmune((PlayerEntity) event.getEntity()))
+        if (PlayerManager.getInstance().isPlayerImmune((Player) event.getEntity()))
         {
             event.setAmount(0);
         }
