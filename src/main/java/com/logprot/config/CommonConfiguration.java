@@ -21,7 +21,7 @@ public class CommonConfiguration
         builder.pop();
 
         builder.push("debug");
-        builder.comment("Wether to enable debug log outputs, default: false");
+        builder.comment("Whether to enable debug log outputs, default: false");
         debugOutput = builder.define("debugLog", false);
     }
 }

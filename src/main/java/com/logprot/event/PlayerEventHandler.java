@@ -5,7 +5,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Eventhandler for the players which are currently invulnerable, removed when no players are invulnverable.
@@ -20,9 +19,9 @@ public class PlayerEventHandler
     }
 
     @SubscribeEvent
-    public void onWorldTick(@NotNull final TickEvent.WorldTickEvent event)
+    public void onServerTick(final TickEvent.ServerTickEvent event)
     {
-        if (!event.world.isRemote)
+        if (event.phase == TickEvent.Phase.END)
         {
             PlayerManager.getInstance().updatePlayers();
         }
