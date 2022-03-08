@@ -11,8 +11,8 @@ public class CommonConfiguration
     protected CommonConfiguration(final ForgeConfigSpec.Builder builder)
     {
         builder.push("Login-settings");
-        builder.comment("Time in ticks the logging player is invulnerable, 20 ticks = 1sec. Default is 5secs = 100 ticks");
-        invulTime = builder.defineInRange("invulnerabilityTime", 100, 0, 50000);
+        builder.comment("Time in ticks the logging player is invulnerable, 20 ticks = 1sec. Default is 50secs = 1000 ticks");
+        invulTime = builder.defineInRange("invulnerabilityTime", 1000, 0, 50000);
 
         builder.comment("Max distance in blocks(2d) the invulnerability lasts, default: 4");
         maxDist = builder.defineInRange("maxDistance", 4, 1, 200);
@@ -21,7 +21,7 @@ public class CommonConfiguration
         builder.pop();
 
         builder.push("debug");
-        builder.comment("Wether to enable debug log outputs, default: false");
+        builder.comment("Whether to enable debug log outputs, default: false");
         debugOutput = builder.define("debugLog", false);
     }
 }

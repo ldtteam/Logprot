@@ -19,9 +19,9 @@ public class PlayerEventHandler
     }
 
     @SubscribeEvent
-    public void onWorldTick(final TickEvent.WorldTickEvent event)
+    public void onServerTick(final TickEvent.ServerTickEvent event)
     {
-        if (!event.world.isClientSide())
+        if (event.phase == TickEvent.Phase.END)
         {
             PlayerManager.getInstance().updatePlayers();
         }
