@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 import java.util.WeakHashMap;
 
 /**
@@ -25,7 +26,7 @@ public class PlayerManager
     /**
      * Stores the logged players, allows gc deletion
      */
-    private WeakHashMap<PlayerEntity, PlayerData> playerDataMap = new WeakHashMap<>();
+    private WeakHashMap<UUID, PlayerData> playerDataMap = new WeakHashMap<>();
 
     private PlayerManager() {}
 
@@ -50,10 +51,14 @@ public class PlayerManager
      */
     public void onPlayerLogin(final PlayerEntity player)
     {
-        playerDataMap.put(player, new PlayerData(player, player.getPosition(), Logprot.getConfig().getCommon().invulTime.get()));
+        if (playerDataMap.containsKey(player.getUUID()))
+        {
+            return;
+        }
+        playerDataMap.put(player.getUUID(), new PlayerData(player, player.getPosition(), Logprot.getConfig().getCommon().invulTime.get()));
         if (debug)
         {
-            Logprot.LOGGER.info("Player:" + player.getName().getString() + " now has login protection for " + Logprot.getConfig().getCommon().invulTime.get() + " ticks");
+            Logprot.LOGGER.info("Player:" + player.hashCode() + " now has protection for " + Logprot.getConfig().getCommon().invulTime.get() + " ticks");
         }
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().register(PlayerEventHandler.getInstance());
     }
@@ -70,21 +75,21 @@ public class PlayerManager
 
         final double maxDist = Math.pow(Logprot.getConfig().getCommon().maxDist.get(), 2);
 
-        Iterator<Map.Entry<PlayerEntity, PlayerData>> iterator = playerDataMap.entrySet().iterator();
+        Iterator<Map.Entry<UUID, PlayerData>> iterator = playerDataMap.entrySet().iterator();
 
         while (iterator.hasNext())
         {
-            Map.Entry<PlayerEntity, PlayerData> entry = iterator.next();
+            Map.Entry<UUID, PlayerData> entry = iterator.next();
 
-            if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getKey().getPosition()) > maxDist
+            if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getValue().player.blockPosition()) > maxDist
                   || entry.getValue().invulTime-- <= 0)
             {
                 if (debug)
                 {
-                    Logprot.LOGGER.info("Player:" + entry.getKey().getName().getString() + " got his login protection removed");
+                    Logprot.LOGGER.info("Player:" + entry.getKey().hashCode() + " got his protection removed");
                 }
 
-                entry.getKey().hurtResistantTime = 0;
+                entry.getValue().player.hurtTime = 0;
                 iterator.remove();
             }
         }
@@ -103,6 +108,6 @@ public class PlayerManager
      */
     public boolean isPlayerImmune(final PlayerEntity playerEntity)
     {
-        return playerDataMap.containsKey(playerEntity);
+        return playerDataMap.containsKey(playerEntity.getUUID());
     }
 }
