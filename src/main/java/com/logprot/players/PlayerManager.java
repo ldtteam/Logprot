@@ -51,11 +51,12 @@ public class PlayerManager
      */
     public void onPlayerLogin(final PlayerEntity player)
     {
-        if (playerDataMap.containsKey(player.getUUID()))
+        if (playerDataMap.containsKey(player.getGameProfile().getId()))
         {
             return;
         }
-        playerDataMap.put(player.getUUID(), new PlayerData(player, player.getPosition(), Logprot.getConfig().getCommon().invulTime.get()));
+        playerDataMap.put(player.getGameProfile().getId(), new PlayerData(player, player.getPosition(), Logprot.getConfig().getCommon().invulTime.get()));
+        player.hurtTime = Logprot.getConfig().getCommon().invulTime.get();
         if (debug)
         {
             Logprot.LOGGER.info("Player:" + player.hashCode() + " now has protection for " + Logprot.getConfig().getCommon().invulTime.get() + " ticks");
@@ -81,7 +82,7 @@ public class PlayerManager
         {
             Map.Entry<UUID, PlayerData> entry = iterator.next();
 
-            if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getValue().player.blockPosition()) > maxDist
+            if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getValue().player.getPosition()) > maxDist
                   || entry.getValue().invulTime-- <= 0)
             {
                 if (debug)
@@ -108,6 +109,6 @@ public class PlayerManager
      */
     public boolean isPlayerImmune(final PlayerEntity playerEntity)
     {
-        return playerDataMap.containsKey(playerEntity.getUUID());
+        return playerDataMap.containsKey(playerEntity.getGameProfile().getId());
     }
 }
