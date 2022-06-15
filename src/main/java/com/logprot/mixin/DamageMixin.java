@@ -15,7 +15,7 @@ public class DamageMixin
     @Inject(at = @At("HEAD"), method = "damage", cancellable = true)
     private void onDamage(final DamageSource source, final float amount, final CallbackInfoReturnable<Boolean> cir)
     {
-        if (true || PlayerManager.getInstance().isPlayerImmune((PlayerEntity) (Object) this))
+        if (PlayerManager.getInstance().isPlayerImmune((PlayerEntity) (Object) this))
         {
             cir.setReturnValue(false);
         }
