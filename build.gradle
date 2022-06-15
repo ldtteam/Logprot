@@ -37,7 +37,6 @@ minecraft {
 
             workingDirectory project.file('run')
 
-
             mods {
                 modid {
                     source sourceSets.main
