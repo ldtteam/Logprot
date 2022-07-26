@@ -15,7 +15,7 @@ public class EventHandler
     @SubscribeEvent
     public static void onEntityAdded(final PlayerEvent.PlayerLoggedInEvent event)
     {
-        PlayerManager.getInstance().onPlayerLogin(event.getPlayer());
+        PlayerManager.getInstance().onPlayerLogin(event.getEntity());
     }
 
     @SubscribeEvent
@@ -23,7 +23,7 @@ public class EventHandler
     {
         if (Logprot.getConfig().getCommon().dimensionprotection.get())
         {
-            PlayerManager.getInstance().onPlayerLogin(event.getPlayer());
+            PlayerManager.getInstance().onPlayerLogin(event.getEntity());
         }
     }
 
@@ -32,7 +32,7 @@ public class EventHandler
     {
         if (event.isWasDeath() && Logprot.getConfig().getCommon().respawnprotection.get())
         {
-            PlayerManager.getInstance().onPlayerLogin(event.getPlayer());
+            PlayerManager.getInstance().onPlayerLogin(event.getEntity());
         }
     }
 }
