@@ -32,7 +32,7 @@ public class Logprot implements ModInitializer
         config.load();
         LOGGER.info("Shields up!");
 
-        ServerEntityEvents.ENTITY_LOAD.register((e,w) ->
+        ServerEntityEvents.ENTITY_LOAD.register((e, w) ->
         {
             if (e instanceof ServerPlayerEntity)
             {
@@ -40,12 +40,9 @@ public class Logprot implements ModInitializer
             }
         });
 
-        ServerTickEvents.END_WORLD_TICK.register(world ->
+        ServerTickEvents.END_SERVER_TICK.register(world ->
         {
-            if (!world.isClient())
-            {
-                PlayerManager.getInstance().updatePlayers();
-            }
+            PlayerManager.getInstance().updatePlayers();
         });
     }
 }

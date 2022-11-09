@@ -5,7 +5,7 @@ import com.logprot.Logprot;
 
 public class CommonConfiguration
 {
-    public int     invulTime   = 100;
+    public int     invulTime   = 1000;
     public int     maxDist     = 4;
     public boolean debugOutput = false;
 
@@ -14,7 +14,7 @@ public class CommonConfiguration
         final JsonObject root = new JsonObject();
 
         final JsonObject entry = new JsonObject();
-        entry.addProperty("desc:", "Time in ticks the logging player is invulnerable, 20 ticks is 1sec. Default is 5secs so 100 ticks");
+        entry.addProperty("desc:", "Time in ticks the logging player is invulnerable, 20 ticks is 1sec. Default is 50secs so 1000 ticks");
         entry.addProperty("invulTime", invulTime);
         root.add("invulTime", entry);
 
