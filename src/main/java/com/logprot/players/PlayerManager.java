@@ -58,7 +58,7 @@ public class PlayerManager
         playerDataMap.put(player.getUUID(), new PlayerData(player, player.blockPosition(), Logprot.getConfig().getCommon().invulTime.get()));
         if (debug)
         {
-            Logprot.LOGGER.info("Player:" + player.hashCode() + " now has protection for " + Logprot.getConfig().getCommon().invulTime.get() + " ticks");
+            Logprot.LOGGER.info("Player:" + player.getDisplayName().getString() + " now has protection for " + Logprot.getConfig().getCommon().invulTime.get() + " ticks");
         }
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().register(PlayerEventHandler.getInstance());
     }
@@ -86,7 +86,7 @@ public class PlayerManager
             {
                 if (debug)
                 {
-                    Logprot.LOGGER.info("Player:" + entry.getKey().hashCode() + " got his protection removed");
+                    Logprot.LOGGER.info("Player:" + entry.getValue().player.getDisplayName().getString() + " got his protection removed");
                 }
 
                 entry.getValue().player.hurtTime = 0;
