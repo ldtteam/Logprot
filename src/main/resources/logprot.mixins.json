@@ -4,9 +4,9 @@
   "package": "com.logprot.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "DamageMixin"
   ],
   "client": [
-    "DamageMixin"
   ],
   "injectors": {
     "defaultRequire": 1

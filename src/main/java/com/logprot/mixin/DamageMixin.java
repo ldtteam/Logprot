@@ -1,9 +1,11 @@
 package com.logprot.mixin;
 
 import com.logprot.players.PlayerManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,5 +21,14 @@ public class DamageMixin
         {
             cir.setReturnValue(false);
         }
+    }
+
+
+    @Inject(at = @At("RETURN"), method = "moveToWorld")
+    private void onTP(
+      final ServerWorld destination,
+      final CallbackInfoReturnable<Entity> cir)
+    {
+        PlayerManager.getInstance().onPlayerTeleport((ServerPlayerEntity) (Object) this);
     }
 }
