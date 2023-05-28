@@ -1,6 +1,6 @@
 package com.logprot.Utils;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public abstract class BlockPosUtils
 {

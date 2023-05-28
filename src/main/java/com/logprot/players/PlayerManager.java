@@ -2,9 +2,8 @@ package com.logprot.players;
 
 import com.logprot.Logprot;
 import com.logprot.Utils.BlockPosUtils;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class PlayerManager
     /**
      * Stores the logged players, allows gc deletion
      */
-    private WeakHashMap<PlayerEntity, PlayerData> playerDataMap = new WeakHashMap<>();
+    private WeakHashMap<Player, PlayerData> playerDataMap = new WeakHashMap<>();
 
     private PlayerManager() {}
 
@@ -46,9 +45,9 @@ public class PlayerManager
      *
      * @param player
      */
-    public void onPlayerLogin(final PlayerEntity player)
+    public void onPlayerLogin(final Player player)
     {
-        playerDataMap.put(player, new PlayerData(player, player.getBlockPos(), Logprot.getConfig().getCommonConfig().invulTime));
+        playerDataMap.put(player, new PlayerData(player, player.blockPosition(), Logprot.getConfig().getCommonConfig().invulTime));
         if (Logprot.getConfig().getCommonConfig().debugOutput)
         {
             Logprot.LOGGER.info("Player:" + player.getName().getString() + " now has login protection for " + Logprot.getConfig().getCommonConfig().invulTime + " ticks");
@@ -67,11 +66,11 @@ public class PlayerManager
 
         final double maxDist = Math.pow(Logprot.getConfig().getCommonConfig().maxDist, 2);
 
-        Iterator<Map.Entry<PlayerEntity, PlayerData>> iterator = playerDataMap.entrySet().iterator();
+        Iterator<Map.Entry<Player, PlayerData>> iterator = playerDataMap.entrySet().iterator();
 
         while (iterator.hasNext())
         {
-            Map.Entry<PlayerEntity, PlayerData> entry = iterator.next();
+            Map.Entry<Player, PlayerData> entry = iterator.next();
 
             if (!entry.getKey().isAlive())
             {
@@ -79,7 +78,7 @@ public class PlayerManager
                 break;
             }
 
-            if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getKey().getBlockPos()) > maxDist)
+            if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getKey().blockPosition()) > maxDist)
             {
                 if (Logprot.getConfig().getCommonConfig().debugOutput)
                 {
@@ -110,7 +109,7 @@ public class PlayerManager
      * @param playerEntity
      * @return
      */
-    public boolean isPlayerImmune(final PlayerEntity playerEntity)
+    public boolean isPlayerImmune(final Player playerEntity)
     {
         if (playerDataMap.isEmpty())
         {
@@ -120,12 +119,13 @@ public class PlayerManager
         return playerDataMap.containsKey(playerEntity);
     }
 
-    public void onPlayerTeleport(final ServerPlayerEntity player)
+    public void onPlayerTeleport(final ServerPlayer player)
     {
-        playerDataMap.put(player, new PlayerData(player, new BlockPos(player.getX(), player.getY(),player.getZ()), Logprot.getConfig().getCommonConfig().invulTime));
+        playerDataMap.put(player, new PlayerData(player, player.blockPosition(), Logprot.getConfig().getCommonConfig().invulTime));
         if (Logprot.getConfig().getCommonConfig().debugOutput)
         {
-            Logprot.LOGGER.info("Teleported player:" + player.getName().getString() + " now has login protection for " + Logprot.getConfig().getCommonConfig().invulTime + " ticks");
+            Logprot.LOGGER.info(
+              "Teleported player:" + player.getName().getString() + " now has login protection for " + Logprot.getConfig().getCommonConfig().invulTime + " ticks");
         }
     }
 }

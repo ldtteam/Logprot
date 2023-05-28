@@ -5,8 +5,8 @@ import com.logprot.players.PlayerManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,9 +34,9 @@ public class Logprot implements ModInitializer
 
         ServerEntityEvents.ENTITY_LOAD.register((e, w) ->
         {
-            if (e instanceof ServerPlayerEntity)
+            if (e instanceof ServerPlayer)
             {
-                PlayerManager.getInstance().onPlayerLogin((PlayerEntity) e);
+                PlayerManager.getInstance().onPlayerLogin((Player) e);
             }
         });
 
