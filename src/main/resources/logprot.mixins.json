@@ -1,0 +1,14 @@
+{
+  "required": false,
+  "package": "com.logprot.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "logprot.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}
