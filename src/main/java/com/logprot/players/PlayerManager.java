@@ -3,6 +3,8 @@ package com.logprot.players;
 import com.logprot.Logprot;
 import com.logprot.Utils.BlockPosUtils;
 import com.logprot.event.PlayerEventHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.common.Mod;
 
@@ -40,6 +42,7 @@ public class PlayerManager
         if (PlayerManager.instance == null)
         {
             PlayerManager.instance = new PlayerManager();
+            Mod.EventBusSubscriber.Bus.FORGE.bus().get().register(PlayerEventHandler.getInstance());
         }
         return PlayerManager.instance;
     }
@@ -60,7 +63,6 @@ public class PlayerManager
         {
             Logprot.LOGGER.info("Player:" + player.getDisplayName().getString() + " now has protection for " + Logprot.getConfig().getCommon().invulTime.get() + " ticks");
         }
-        Mod.EventBusSubscriber.Bus.FORGE.bus().get().register(PlayerEventHandler.getInstance());
     }
 
     /**
@@ -81,22 +83,34 @@ public class PlayerManager
         {
             Map.Entry<UUID, PlayerData> entry = iterator.next();
 
-            if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getValue().player.blockPosition()) > maxDist
-                  || entry.getValue().invulTime-- <= 0)
+            if (!entry.getValue().player.isAlive())
             {
-                if (debug)
+                iterator.remove();
+                break;
+            }
+
+            if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getValue().player.blockPosition()) > maxDist)
+            {
+                if (Logprot.getConfig().getCommon().debugOutput.get())
                 {
-                    Logprot.LOGGER.info("Player:" + entry.getValue().player.getDisplayName().getString() + " got his protection removed");
+                    Logprot.LOGGER.info("Player:" + entry.getValue().player.getName().getString() + " got his login protection removed due to moving");
+                }
+
+                entry.getValue().player.hurtTime = 0;
+                iterator.remove();
+                break;
+            }
+
+            if (entry.getValue().invulTime-- <= 0)
+            {
+                if (Logprot.getConfig().getCommon().debugOutput.get())
+                {
+                    Logprot.LOGGER.info("Player:" + entry.getValue().player.getName().getString() + " got his login protection removed due to timeout");
                 }
 
                 entry.getValue().player.hurtTime = 0;
                 iterator.remove();
             }
-        }
-
-        if (playerDataMap.isEmpty())
-        {
-            Mod.EventBusSubscriber.Bus.FORGE.bus().get().unregister(PlayerEventHandler.getInstance());
         }
     }
 
@@ -109,5 +123,14 @@ public class PlayerManager
     public boolean isPlayerImmune(final Player playerEntity)
     {
         return playerDataMap.containsKey(playerEntity.getUUID());
+    }
+
+    public void onPlayerTeleport(final ServerPlayer player)
+    {
+        playerDataMap.put(player.getUUID(), new PlayerData(player, new BlockPos(player.getBlockX(), player.getBlockY(),player.getBlockZ()), Logprot.getConfig().getCommon().invulTime.get()));
+        if (Logprot.getConfig().getCommon().debugOutput.get())
+        {
+            Logprot.LOGGER.info("Teleported player:" + player.getName().getString() + " now has login protection for " + Logprot.getConfig().getCommon().invulTime.get() + " ticks");
+        }
     }
 }
