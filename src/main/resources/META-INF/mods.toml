@@ -48,6 +48,6 @@ Login protection mod which protects the player form damage during login.
 [[dependencies.logprot]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.20,1.21)"
     ordering="NONE"
     side="BOTH"
