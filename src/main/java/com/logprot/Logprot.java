@@ -1,6 +1,7 @@
 package com.logprot;
 
-import com.logprot.config.Configuration;
+import com.cupboard.config.CupboardConfig;
+import com.logprot.config.CommonConfiguration;
 import com.logprot.event.EventHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -17,20 +18,14 @@ public class Logprot
     /**
      * The config instance.
      */
-    private static Configuration config;
+    public static CupboardConfig<CommonConfiguration> config = new CupboardConfig<>(Constants.MOD_ID, new CommonConfiguration());
 
     public Logprot()
     {
 
-        config = new Configuration();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().register(EventHandler.class);
-    }
-
-    public static Configuration getConfig()
-    {
-        return config;
     }
 
     private void setup(final FMLCommonSetupEvent event)

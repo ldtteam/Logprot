@@ -23,8 +23,6 @@ public class PlayerManager
      */
     private static PlayerManager instance;
 
-    private boolean debug = Logprot.getConfig().getCommon().debugOutput.get();
-
     /**
      * Stores the logged players, allows gc deletion
      */
@@ -58,10 +56,10 @@ public class PlayerManager
         {
             return;
         }
-        playerDataMap.put(player.getUUID(), new PlayerData(player, player.blockPosition(), Logprot.getConfig().getCommon().invulTime.get()));
-        if (debug)
+        playerDataMap.put(player.getUUID(), new PlayerData(player, player.blockPosition(), Logprot.config.getCommonConfig().invulTime));
+        if (Logprot.config.getCommonConfig().debugOutput)
         {
-            Logprot.LOGGER.info("Player:" + player.getDisplayName().getString() + " now has protection for " + Logprot.getConfig().getCommon().invulTime.get() + " ticks");
+            Logprot.LOGGER.info("Player:" + player.getDisplayName().getString() + " now has protection for " + Logprot.config.getCommonConfig().invulTime + " ticks");
         }
     }
 
@@ -75,7 +73,7 @@ public class PlayerManager
             return;
         }
 
-        final double maxDist = Math.pow(Logprot.getConfig().getCommon().maxDist.get(), 2);
+        final double maxDist = Math.pow(Logprot.config.getCommonConfig().maxDist, 2);
 
         Iterator<Map.Entry<UUID, PlayerData>> iterator = playerDataMap.entrySet().iterator();
 
@@ -91,7 +89,7 @@ public class PlayerManager
 
             if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getValue().player.blockPosition()) > maxDist)
             {
-                if (Logprot.getConfig().getCommon().debugOutput.get())
+                if (Logprot.config.getCommonConfig().debugOutput)
                 {
                     Logprot.LOGGER.info("Player:" + entry.getValue().player.getName().getString() + " got his login protection removed due to moving");
                 }
@@ -103,7 +101,7 @@ public class PlayerManager
 
             if (entry.getValue().invulTime-- <= 0)
             {
-                if (Logprot.getConfig().getCommon().debugOutput.get())
+                if (Logprot.config.getCommonConfig().debugOutput)
                 {
                     Logprot.LOGGER.info("Player:" + entry.getValue().player.getName().getString() + " got his login protection removed due to timeout");
                 }
@@ -127,10 +125,11 @@ public class PlayerManager
 
     public void onPlayerTeleport(final ServerPlayer player)
     {
-        playerDataMap.put(player.getUUID(), new PlayerData(player, new BlockPos(player.getBlockX(), player.getBlockY(),player.getBlockZ()), Logprot.getConfig().getCommon().invulTime.get()));
-        if (Logprot.getConfig().getCommon().debugOutput.get())
+        playerDataMap.put(player.getUUID(),
+          new PlayerData(player, new BlockPos(player.getBlockX(), player.getBlockY(), player.getBlockZ()), Logprot.config.getCommonConfig().invulTime));
+        if (Logprot.config.getCommonConfig().debugOutput)
         {
-            Logprot.LOGGER.info("Teleported player:" + player.getName().getString() + " now has login protection for " + Logprot.getConfig().getCommon().invulTime.get() + " ticks");
+            Logprot.LOGGER.info("Teleported player:" + player.getName().getString() + " now has login protection for " + Logprot.config.getCommonConfig().invulTime + " ticks");
         }
     }
 }

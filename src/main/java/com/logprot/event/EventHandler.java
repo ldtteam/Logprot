@@ -21,7 +21,7 @@ public class EventHandler
     @SubscribeEvent
     public static void onChangeDim(final PlayerEvent.PlayerChangedDimensionEvent event)
     {
-        if (Logprot.getConfig().getCommon().dimensionprotection.get())
+        if (Logprot.config.getCommonConfig().dimensionprotection)
         {
             PlayerManager.getInstance().onPlayerLogin(event.getEntity());
         }
@@ -30,7 +30,7 @@ public class EventHandler
     @SubscribeEvent
     public static void onChangeDim(final PlayerEvent.Clone event)
     {
-        if (event.isWasDeath() && Logprot.getConfig().getCommon().respawnprotection.get())
+        if (event.isWasDeath() && Logprot.config.getCommonConfig().respawnprotection)
         {
             PlayerManager.getInstance().onPlayerLogin(event.getEntity());
         }
