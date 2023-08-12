@@ -1,6 +1,7 @@
 package com.logprot;
 
-import com.logprot.config.Configuration;
+import com.cupboard.config.CupboardConfig;
+import com.logprot.config.CommonConfiguration;
 import com.logprot.players.PlayerManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -18,18 +19,11 @@ public class Logprot implements ModInitializer
     /**
      * The config instance.
      */
-    private static Configuration config;
-
-    public static Configuration getConfig()
-    {
-        return config;
-    }
+    public static CupboardConfig<CommonConfiguration> config = new CupboardConfig<>(Constants.MOD_ID, new CommonConfiguration());
 
     @Override
     public void onInitialize()
     {
-        config = new Configuration();
-        config.load();
         LOGGER.info("Shields up!");
 
         ServerEntityEvents.ENTITY_LOAD.register((e, w) ->

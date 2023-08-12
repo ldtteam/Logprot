@@ -1,13 +1,15 @@
 package com.logprot.config;
 
+import com.cupboard.config.ICommonConfig;
 import com.google.gson.JsonObject;
-import com.logprot.Logprot;
 
-public class CommonConfiguration
+public class CommonConfiguration implements ICommonConfig
 {
-    public int     invulTime   = 1000;
-    public int     maxDist     = 4;
-    public boolean debugOutput = false;
+    public int     invulTime           = 1000;
+    public int     maxDist             = 4;
+    public boolean debugOutput         = false;
+    public boolean dimensionprotection = true;
+    public boolean respawnprotection   = true;
 
     public JsonObject serialize()
     {
@@ -29,26 +31,27 @@ public class CommonConfiguration
         entry3.addProperty("debugOutput", debugOutput);
         root.add("debugOutput", entry3);
 
+        final JsonObject entry4 = new JsonObject();
+        entry4.addProperty("desc:",
+          "Enables the protection for dimension changes too, default: true");
+        entry4.addProperty("dimensionprotection", dimensionprotection);
+        root.add("dimensionprotection", entry4);
+
+        final JsonObject entry5 = new JsonObject();
+        entry5.addProperty("desc:",
+          "Enables the protection for respawning too, default: true");
+        entry5.addProperty("respawnprotection", respawnprotection);
+        root.add("respawnprotection", entry5);
+
         return root;
     }
 
     public void deserialize(JsonObject data)
     {
-        if (data == null)
-        {
-            Logprot.LOGGER.error("Config file was empty!");
-            return;
-        }
-
-        try
-        {
-            invulTime = data.get("invulTime").getAsJsonObject().get("invulTime").getAsInt();
-            maxDist = data.get("maxDist").getAsJsonObject().get("maxDist").getAsInt();
-            debugOutput = data.get("debugOutput").getAsJsonObject().get("debugOutput").getAsBoolean();
-        }
-        catch (Exception e)
-        {
-            Logprot.LOGGER.error("Could not parse config file", e);
-        }
+        invulTime = data.get("invulTime").getAsJsonObject().get("invulTime").getAsInt();
+        maxDist = data.get("maxDist").getAsJsonObject().get("maxDist").getAsInt();
+        debugOutput = data.get("debugOutput").getAsJsonObject().get("debugOutput").getAsBoolean();
+        dimensionprotection = data.get("dimensionprotection").getAsJsonObject().get("dimensionprotection").getAsBoolean();
+        respawnprotection = data.get("respawnprotection").getAsJsonObject().get("respawnprotection").getAsBoolean();
     }
 }

@@ -2,7 +2,6 @@ package com.logprot.players;
 
 import com.logprot.Logprot;
 import com.logprot.Utils.BlockPosUtils;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.Iterator;
@@ -47,10 +46,10 @@ public class PlayerManager
      */
     public void onPlayerLogin(final Player player)
     {
-        playerDataMap.put(player, new PlayerData(player, player.blockPosition(), Logprot.getConfig().getCommonConfig().invulTime));
-        if (Logprot.getConfig().getCommonConfig().debugOutput)
+        playerDataMap.put(player, new PlayerData(player, player.blockPosition(), Logprot.config.getCommonConfig().invulTime));
+        if (Logprot.config.getCommonConfig().debugOutput)
         {
-            Logprot.LOGGER.info("Player:" + player.getName().getString() + " now has login protection for " + Logprot.getConfig().getCommonConfig().invulTime + " ticks");
+            Logprot.LOGGER.info("Player:" + player.getName().getString() + " now has login protection for " + Logprot.config.getCommonConfig().invulTime + " ticks");
         }
     }
 
@@ -64,7 +63,7 @@ public class PlayerManager
             return;
         }
 
-        final double maxDist = Math.pow(Logprot.getConfig().getCommonConfig().maxDist, 2);
+        final double maxDist = Math.pow(Logprot.config.getCommonConfig().maxDist, 2);
 
         Iterator<Map.Entry<Player, PlayerData>> iterator = playerDataMap.entrySet().iterator();
 
@@ -80,7 +79,7 @@ public class PlayerManager
 
             if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getKey().blockPosition()) > maxDist)
             {
-                if (Logprot.getConfig().getCommonConfig().debugOutput)
+                if (Logprot.config.getCommonConfig().debugOutput)
                 {
                     Logprot.LOGGER.info("Player:" + entry.getKey().getName().getString() + " got his login protection removed due to moving");
                 }
@@ -92,7 +91,7 @@ public class PlayerManager
 
             if (entry.getValue().invulTime-- <= 0)
             {
-                if (Logprot.getConfig().getCommonConfig().debugOutput)
+                if (Logprot.config.getCommonConfig().debugOutput)
                 {
                     Logprot.LOGGER.info("Player:" + entry.getKey().getName().getString() + " got his login protection removed due to timeout");
                 }
@@ -117,15 +116,5 @@ public class PlayerManager
         }
 
         return playerDataMap.containsKey(playerEntity);
-    }
-
-    public void onPlayerTeleport(final ServerPlayer player)
-    {
-        playerDataMap.put(player, new PlayerData(player, player.blockPosition(), Logprot.getConfig().getCommonConfig().invulTime));
-        if (Logprot.getConfig().getCommonConfig().debugOutput)
-        {
-            Logprot.LOGGER.info(
-              "Teleported player:" + player.getName().getString() + " now has login protection for " + Logprot.getConfig().getCommonConfig().invulTime + " ticks");
-        }
     }
 }
