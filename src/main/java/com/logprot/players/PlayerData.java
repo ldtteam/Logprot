@@ -10,12 +10,12 @@ public class PlayerData
 {
     public Player   player;
     public BlockPos loginPos;
-    public int      invulTime;
+    public long     invulTimePoint;
 
-    public PlayerData(final Player player, final BlockPos loginPos, final int invulTime)
+    public PlayerData(final Player player, final BlockPos loginPos, final long invulTimePoint)
     {
         this.player = player;
         this.loginPos = loginPos;
-        this.invulTime = invulTime;
+        this.invulTimePoint = invulTimePoint;
     }
 }

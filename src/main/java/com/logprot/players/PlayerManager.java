@@ -46,7 +46,7 @@ public class PlayerManager
      */
     public void onPlayerLogin(final Player player)
     {
-        playerDataMap.put(player, new PlayerData(player, player.blockPosition(), Logprot.config.getCommonConfig().invulTime));
+        playerDataMap.put(player, new PlayerData(player, player.blockPosition(), System.currentTimeMillis() +  (Logprot.config.getCommonConfig().invulTime/20) * 1000L));
         if (Logprot.config.getCommonConfig().debugOutput)
         {
             Logprot.LOGGER.info("Player:" + player.getName().getString() + " now has login protection for " + Logprot.config.getCommonConfig().invulTime + " ticks");
@@ -66,6 +66,8 @@ public class PlayerManager
         final double maxDist = Math.pow(Logprot.config.getCommonConfig().maxDist, 2);
 
         Iterator<Map.Entry<Player, PlayerData>> iterator = playerDataMap.entrySet().iterator();
+
+        long currentTime = System.currentTimeMillis();
 
         while (iterator.hasNext())
         {
@@ -89,7 +91,8 @@ public class PlayerManager
                 break;
             }
 
-            if (entry.getValue().invulTime-- <= 0)
+            // Use timepoints instead?
+            if (entry.getValue().invulTimePoint <= currentTime)
             {
                 if (Logprot.config.getCommonConfig().debugOutput)
                 {
@@ -115,6 +118,7 @@ public class PlayerManager
             return false;
         }
 
+        updatePlayers();
         return playerDataMap.containsKey(playerEntity);
     }
 }
