@@ -56,7 +56,7 @@ public class PlayerManager
         {
             return;
         }
-        playerDataMap.put(player.getUUID(), new PlayerData(player, player.blockPosition(), Logprot.config.getCommonConfig().invulTime));
+        playerDataMap.put(player.getUUID(), new PlayerData(player, player.blockPosition(), System.currentTimeMillis() +  (Logprot.config.getCommonConfig().invulTime/20) * 1000L));
         if (Logprot.config.getCommonConfig().debugOutput)
         {
             Logprot.LOGGER.info("Player:" + player.getDisplayName().getString() + " now has protection for " + Logprot.config.getCommonConfig().invulTime + " ticks");
@@ -76,6 +76,8 @@ public class PlayerManager
         final double maxDist = Math.pow(Logprot.config.getCommonConfig().maxDist, 2);
 
         Iterator<Map.Entry<UUID, PlayerData>> iterator = playerDataMap.entrySet().iterator();
+
+        long currentTime = System.currentTimeMillis();
 
         while (iterator.hasNext())
         {
@@ -99,7 +101,8 @@ public class PlayerManager
                 break;
             }
 
-            if (entry.getValue().invulTime-- <= 0)
+            // Use timepoints instead?
+            if (entry.getValue().invulTimePoint <= currentTime)
             {
                 if (Logprot.config.getCommonConfig().debugOutput)
                 {
@@ -120,6 +123,7 @@ public class PlayerManager
      */
     public boolean isPlayerImmune(final Player playerEntity)
     {
+        updatePlayers();
         return playerDataMap.containsKey(playerEntity.getUUID());
     }
 
